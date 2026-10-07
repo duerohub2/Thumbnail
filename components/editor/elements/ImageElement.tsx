@@ -7,11 +7,17 @@ import type { ImageElementData } from '@/types';
 
 interface Props {
   element: ImageElementData;
+  isSelected: boolean;
   onSelect: () => void;
   onChange: (patch: Partial<ImageElementData>) => void;
 }
 
-export function ImageElement({ element, onSelect, onChange }: Props) {
+export function ImageElement({
+  element,
+  isSelected,
+  onSelect,
+  onChange
+}: Props) {
   const ref = useRef<Konva.Image>(null);
   const [image, setImage] = useState<HTMLImageElement | null>(null);
 
@@ -38,7 +44,7 @@ export function ImageElement({ element, onSelect, onChange }: Props) {
       opacity={element.opacity}
       visible={element.visible}
       listening={!element.locked}
-      draggable={!element.locked}
+      draggable={isSelected && !element.locked}
       cornerRadius={element.cornerRadius}
       shadowColor={element.shadowColor}
       shadowBlur={element.shadowBlur}
