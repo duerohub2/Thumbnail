@@ -7,11 +7,17 @@ import type { TextElementData } from '@/types';
 
 interface Props {
   element: TextElementData;
+  isSelected: boolean;
   onSelect: () => void;
   onChange: (patch: Partial<TextElementData>) => void;
 }
 
-export function TextElement({ element, onSelect, onChange }: Props) {
+export function TextElement({
+  element,
+  isSelected,
+  onSelect,
+  onChange
+}: Props) {
   const ref = useRef<Konva.Text>(null);
 
   return (
@@ -37,7 +43,7 @@ export function TextElement({ element, onSelect, onChange }: Props) {
       opacity={element.opacity}
       visible={element.visible}
       listening={!element.locked}
-      draggable={!element.locked}
+      draggable={isSelected && !element.locked}
       shadowColor={element.shadowColor}
       shadowBlur={element.shadowBlur}
       shadowOffsetX={element.shadowOffsetX}
