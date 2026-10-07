@@ -7,11 +7,17 @@ import type { BadgeElementData } from '@/types';
 
 interface Props {
   element: BadgeElementData;
+  isSelected: boolean;
   onSelect: () => void;
   onChange: (patch: Partial<BadgeElementData>) => void;
 }
 
-export function BadgeElement({ element, onSelect, onChange }: Props) {
+export function BadgeElement({
+  element,
+  isSelected,
+  onSelect,
+  onChange
+}: Props) {
   const groupRef = useRef<Konva.Group>(null);
 
   return (
@@ -25,7 +31,7 @@ export function BadgeElement({ element, onSelect, onChange }: Props) {
       opacity={element.opacity}
       visible={element.visible}
       listening={!element.locked}
-      draggable={!element.locked}
+      draggable={isSelected && !element.locked}
       onClick={onSelect}
       onTap={onSelect}
       onDragEnd={(e) => {
