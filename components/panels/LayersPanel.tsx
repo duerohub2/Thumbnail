@@ -7,6 +7,7 @@ function elementLabel(el: CanvasElement): string {
   if (el.type === 'text') return `Text: ${el.text.slice(0, 20)}`;
   if (el.type === 'image') return 'Image';
   if (el.type === 'badge') return `Badge: ${el.text}`;
+  if (el.type === 'placeholder') return `Slot: ${el.label}`;
   return 'Element';
 }
 
@@ -27,7 +28,7 @@ export function LayersPanel() {
 
       {elements.length === 0 ? (
         <p className="text-[10px] font-bold opacity-60 py-2">
-          No elements yet. Add text, image, or badge.
+          No elements yet.
         </p>
       ) : (
         <div className="flex flex-col gap-1 max-h-[40vh] overflow-y-auto no-scrollbar">
