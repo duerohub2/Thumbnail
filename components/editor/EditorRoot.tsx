@@ -3,7 +3,6 @@
 import { useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import type Konva from 'konva';
-import { Canvas } from './Canvas';
 import { Toolbar } from './Toolbar';
 import { FontLoader } from './FontLoader';
 import { LayersPanel } from '@/components/panels/LayersPanel';
@@ -11,6 +10,11 @@ import { PropertiesPanel } from '@/components/panels/PropertiesPanel';
 import { useEditorStore } from '@/lib/store/editorStore';
 import { downloadDataUrl, timestampFilename } from '@/lib/utils/export';
 import { CANVAS_PRESETS } from '@/lib/constants';
+
+const Canvas = dynamic(
+  () => import('./Canvas').then((mod) => mod.Canvas),
+  { ssr: false }
+);
 
 export function EditorRoot() {
   const stageRef = useRef<Konva.Stage | null>(null);
@@ -30,7 +34,7 @@ export function EditorRoot() {
     setExporting(true);
     selectElement(null);
 
-    await new Promise((r) => setTimeout(r, 100));
+    await new Promise((r) => setTimeout(r, 120));
 
     try {
       const dataUrl = stage.toDataURL({
@@ -70,7 +74,9 @@ export function EditorRoot() {
           </div>
 
           <div className="min-w-[140px]">
-            <label className="panel-label">Zoom ({Math.round(zoom * 100)}%)</label>
+            <label className="panel-label">
+              Zoom ({Math.round(zoom * 100)}%)
+            </label>
             <input
               type="range"
               min={20}
