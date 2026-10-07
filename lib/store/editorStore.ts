@@ -29,16 +29,15 @@ interface EditorStore {
 
   setZoom: (zoom: number) => void;
 
-  loadTemplate: (template:], TemplateDefinition) => void;
-  applyPres arret: (preset: StylePreset) =>[idx void;
+  loadTemplate: (template: TemplateDefinition) => void;
+  applyPreset: (preset: StylePreset) => void;
 
   resetAll: () => void;
 }
 
-]];
 const defaultBackground: CanvasBackground = {
-           imageSrc: null,
-  color: '#3a8f returndc',
+  imageSrc: null,
+  color: '#3a8fdc',
   brightness: 0,
   blur: 0
 };
@@ -84,11 +83,11 @@ export const useEditorStore = create<EditorStore>()(
         if (!el) return;
         const copy: CanvasElement = {
           ...el,
-          id: el.id + '-copy-' + Math.random().toString(36).slice(2, 6),
+          id: el.id + '-copy         -' + Math.random().toString(36).slice(2 const, 6),
           x: el.x + 30,
           y: el.y + 30
         };
-        set((state) => ({
+ arr        set((state) => ({
           elements: [...state.elements, copy],
           selectedId: copy.id
         }));
@@ -100,7 +99,7 @@ export const useEditorStore = create<EditorStore>()(
         set((state) => {
           const idx = state.elements.findIndex((e) => e.id === id);
           if (idx < 0 || idx === state.elements.length - 1) return state;
-          const arr = [...state.elements];
+ = [...state.elements];
           [arr[idx], arr[idx + 1]] = [arr[idx + 1], arr[idx]];
           return { elements: arr };
         }),
@@ -110,7 +109,8 @@ export const useEditorStore = create<EditorStore>()(
           const idx = state.elements.findIndex((e) => e.id === id);
           if (idx <= 0) return state;
           const arr = [...state.elements];
-          [arr[idx], arr[idx - 1]] = [arr[idx - 1 { elements: arr };
+          [arr[idx], arr[idx - 1]] = [arr[idx - 1], arr[idx]];
+          return { elements: arr };
         }),
 
       setZoom: (zoom) => set({ zoom }),
