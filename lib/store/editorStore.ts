@@ -83,11 +83,11 @@ export const useEditorStore = create<EditorStore>()(
         if (!el) return;
         const copy: CanvasElement = {
           ...el,
-          id: el.id + '-copy         -' + Math.random().toString(36).slice(2 const, 6),
+          id: el.id + '-c-' + Math.random().toString(36).slice(2, 6),
           x: el.x + 30,
           y: el.y + 30
         };
- arr        set((state) => ({
+        set((state) => ({
           elements: [...state.elements, copy],
           selectedId: copy.id
         }));
@@ -99,7 +99,7 @@ export const useEditorStore = create<EditorStore>()(
         set((state) => {
           const idx = state.elements.findIndex((e) => e.id === id);
           if (idx < 0 || idx === state.elements.length - 1) return state;
- = [...state.elements];
+          const arr = [...state.elements];
           [arr[idx], arr[idx + 1]] = [arr[idx + 1], arr[idx]];
           return { elements: arr };
         }),
