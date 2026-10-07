@@ -32,8 +32,7 @@ export function Canvas({ stageRef }: CanvasProps) {
   const zoom = useEditorStore((s) => s.zoom);
   const selectElement = useEditorStore((s) => s.selectElement);
   const updateElement = useEditorStore((s) => s.updateElement);
-  const addElement = useEditorStore((s) => s.addElement);
-  const removeElement = useEditorStore((s) => s.removeElement);
+  const replaceElement = useEditorStore((s) => s.replaceElement);
 
   useEffect(() => {
     if (!background.imageSrc) {
@@ -145,17 +144,16 @@ export function Canvas({ stageRef }: CanvasProps) {
         return;
       }
       const placeholder = ph as PlaceholderElementData;
-      removeElement(placeholder.id);
-      addElement(
-        createImageElement(src, {
-          x: placeholder.x,
-          y: placeholder.y,
-          width: placeholder.width,
-          height: placeholder.height,
-          rotation: placeholder.rotation,
-          cornerRadius: 8
-        })
-      );
+      const imageEl = createImageElement(src, {
+        id: placeholder.id,
+        x: placeholder.x,
+        y: placeholder.y,
+        width: placeholder.width,
+        height: placeholder.height,
+        rotation: placeholder.rotation,
+        cornerRadius: 8
+      });
+      replaceElement(placeholder.id, imageEl);
       setPendingSlotId(null);
     };
     reader.readAsDataURL(file);
