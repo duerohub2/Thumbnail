@@ -1,0 +1,118 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brutal-border-color: #1f1f1f;
+  --brutal-shadow-color: #1f1f1f;
+  --page-bg: #fdf8e8;
+  --card-bg: #ffffff;
+  --text-color: #1f1f1f;
+}
+
+html,
+body {
+  background-color: var(--page-bg);
+  color: var(--text-color);
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer base {
+  * {
+    border-color: var(--brutal-border-color);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-archivo-black), system-ui, sans-serif;
+    letter-spacing: -0.03em;
+  }
+}
+
+@layer components {
+  .brutal-border {
+    border: 3px solid var(--brutal-border-color);
+  }
+
+  .brutal-shadow {
+    box-shadow: 5px 5px 0 0 var(--brutal-shadow-color);
+  }
+
+  .brutal-shadow-sm {
+    box-shadow: 3px 3px 0 0 var(--brutal-shadow-color);
+  }
+
+  .brutal-card {
+    background-color: var(--card-bg);
+    border: 3px solid var(--brutal-border-color);
+    box-shadow: 5px 5px 0 0 var(--brutal-shadow-color);
+    color: var(--text-color);
+  }
+
+  .brutal-btn {
+    border: 3px solid var(--brutal-border-color);
+    box-shadow: 5px 5px 0 0 var(--brutal-shadow-color);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    transition: all 0.12s ease;
+    color: var(--text-color);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .brutal-btn:active {
+    transform: translate(3px, 3px);
+    box-shadow: 0 0 0 0 transparent;
+  }
+
+  .brutal-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .brutal-input {
+    border: 3px solid var(--brutal-border-color);
+    background-color: #ffffff;
+    color: #1f1f1f;
+    padding: 0.5rem 0.75rem;
+    font-weight: 700;
+    width: 100%;
+    outline: none;
+    font-size: 0.75rem;
+  }
+
+  .brutal-input:focus {
+    box-shadow: 3px 3px 0 0 #b8a4e8;
+  }
+
+  .panel-label {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+    margin-top: 0.5rem;
+    letter-spacing: 0.02em;
+  }
+
+  .panel-label:first-child {
+    margin-top: 0;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
