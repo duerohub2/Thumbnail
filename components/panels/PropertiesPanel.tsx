@@ -22,8 +22,7 @@ export function PropertiesPanel() {
   const selectedId = useEditorStore((s) => s.selectedId);
   const elements = useEditorStore((s) => s.elements);
   const updateElement = useEditorStore((s) => s.updateElement);
-  const removeElement = useEditorStore((s) => s.removeElement);
-  const addElement = useEditorStore((s) => s.addElement);
+  const replaceElement = useEditorStore((s) => s.replaceElement);
 
   const element = elements.find((el) => el.id === selectedId);
 
@@ -55,17 +54,16 @@ export function PropertiesPanel() {
           element={element}
           onPick={(src) => {
             const ph = element as PlaceholderElementData;
-            removeElement(ph.id);
-            addElement(
-              createImageElement(src, {
-                x: ph.x,
-                y: ph.y,
-                width: ph.width,
-                height: ph.height,
-                rotation: ph.rotation,
-                cornerRadius: 8
-              })
-            );
+            const imageEl = createImageElement(src, {
+              id: ph.id,
+              x: ph.x,
+              y: ph.y,
+              width: ph.width,
+              height: ph.height,
+              rotation: ph.rotation,
+              cornerRadius: 8
+            });
+            replaceElement(ph.id, imageEl);
           }}
         />
       ) : null}
