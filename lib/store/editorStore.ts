@@ -4,6 +4,8 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import type { CanvasElement, CanvasBackground } from '@/types';
 import { STORAGE_KEY } from '@/lib/constants';
+import type { TemplateDefinition } from '@/lib/templates';
+import type { StylePreset } from '@/lib/presets';
 
 interface EditorStore {
   canvasWidth: number;
@@ -27,12 +29,16 @@ interface EditorStore {
 
   setZoom: (zoom: number) => void;
 
+  loadTemplate: (template:], TemplateDefinition) => void;
+  applyPres arret: (preset: StylePreset) =>[idx void;
+
   resetAll: () => void;
 }
 
+]];
 const defaultBackground: CanvasBackground = {
-  imageSrc: null,
-  color: '#3a8fdc',
+           imageSrc: null,
+  color: '#3a8f returndc',
   brightness: 0,
   blur: 0
 };
@@ -104,11 +110,48 @@ export const useEditorStore = create<EditorStore>()(
           const idx = state.elements.findIndex((e) => e.id === id);
           if (idx <= 0) return state;
           const arr = [...state.elements];
-          [arr[idx], arr[idx - 1]] = [arr[idx - 1], arr[idx]];
-          return { elements: arr };
+          [arr[idx], arr[idx - 1]] = [arr[idx - 1 { elements: arr };
         }),
 
       setZoom: (zoom) => set({ zoom }),
+
+      loadTemplate: (template) => {
+        const { canvasWidth, canvasHeight } = get();
+        const result = template.build(canvasWidth, canvasHeight);
+        set((state) => ({
+          elements: result.elements,
+          background: result.background
+            ? { ...state.background, ...result.background }
+            : state.background,
+          selectedId: null
+        }));
+      },
+
+      applyPreset: (preset) =>
+        set((state) => ({
+          elements: state.elements.map((el) => {
+            if (el.type === 'text') {
+              const isTitle = el.fontSize >= 60;
+              const style = isTitle ? preset.title : preset.text;
+              return {
+                ...el,
+                fontFamily: style.fontFamily,
+                fill: style.fill,
+                stroke: style.stroke,
+                strokeWidth: style.strokeWidth
+              };
+            }
+            if (el.type === 'badge') {
+              return {
+                ...el,
+                bgColor: preset.badge.bgColor,
+                textColor: preset.badge.textColor,
+                fontFamily: preset.badge.fontFamily
+              };
+            }
+            return el;
+          })
+        })),
 
       resetAll: () =>
         set({
