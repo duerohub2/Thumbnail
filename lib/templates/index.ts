@@ -21,7 +21,7 @@ export const TEMPLATES: TemplateDefinition[] = [
     id: 'youtube-gaming',
     name: 'YouTube Gaming',
     description: 'Character left, script right, title top',
-    build: (w) => ({
+    build: (w, h) => ({
       elements: [
         createTextElement({
           x: w * 0.28,
