@@ -20,8 +20,16 @@ export function Toolbar({ onExport, exporting }: ToolbarProps) {
   const resetAll = useEditorStore((s) => s.resetAll);
   const setBackground = useEditorStore((s) => s.setBackground);
   const background = useEditorStore((s) => s.background);
+  const undo = useEditorStore((s) => s.undo);
+  const redo = useEditorStore((s) => s.redo);
+  const pastLen = useEditorStore((s) => s.past.length);
+  const futureLen = useEditorStore((s) => s.future.length);
+
   const bgFileRef = useRef<HTMLInputElement>(null);
   const [confirmReset, setConfirmReset] = useState(false);
+
+  const canUndo = pastLen > 0;
+  const canRedo = futureLen > 0;
 
   function handleAddImage(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -67,6 +75,32 @@ export function Toolbar({ onExport, exporting }: ToolbarProps) {
   return (
     <div className="brutal-card p-3 flex flex-col gap-2">
       <div className="flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={undo}
+          disabled={!canUndo}
+          className={`brutal-btn px-3 py-2 text-[10px] ${
+            canUndo
+              ? 'bg-brand-softblue text-brand-ink'
+              : 'bg-[var(--card-bg)] text-[var(--text-color)] opacity-40'
+          }`}
+        >
+          Undo
+        </button>
+
+        <button
+          type="button"
+          onClick={redo}
+          disabled={!canRedo}
+          className={`brutal-btn px-3 py-2 text-[10px] ${
+            canRedo
+              ? 'bg-brand-softblue text-brand-ink'
+              : 'bg-[var(--card-bg)] text-[var(--text-color)] opacity-40'
+          }`}
+        >
+          Redo
+        </button>
+
         <TemplateGallery />
         <PresetGallery />
 
