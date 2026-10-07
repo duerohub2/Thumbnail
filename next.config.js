@@ -8,6 +8,15 @@ const nextConfig = {
         hostname: '*.supabase.co'
       }
     ]
+  },
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.externals = [...(config.externals || []), 'canvas'];
+    }
+    config.resolve = config.resolve || {};
+    config.resolve.alias = config.resolve.alias || {};
+    config.resolve.alias.canvas = false;
+    return config;
   }
 };
 
