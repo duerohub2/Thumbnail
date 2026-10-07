@@ -20,30 +20,23 @@ interface EditorStore {
   elements: CanvasElement[];
   selectedId: string | null;
   zoom: number;
-
   past: HistorySnapshot[];
   future: HistorySnapshot[];
-
   setCanvasSize: (w: number, h: number) => void;
   setBackground: (partial: Partial<CanvasBackground>) => void;
-
   addElement: (element: CanvasElement) => void;
   updateElement: (id: string, partial: Partial<CanvasElement>) => void;
+  replaceElement: (id: string, replacement: CanvasElement) => void;
   removeElement: (id: string) => void;
   duplicateElement: (id: string) => void;
-
   selectElement: (id: string | null) => void;
   bringForward: (id: string) => void;
   sendBackward: (id: string) => void;
-
   setZoom: (zoom: number) => void;
-
   loadTemplate: (template: TemplateDefinition) => void;
   applyPreset: (preset: StylePreset) => void;
-
   undo: () => void;
   redo: () => void;
-
   resetAll: () => void;
 }
 
@@ -111,6 +104,16 @@ export const useEditorStore = create<EditorStore>()(
             elements: state.elements.map((el) =>
               el.id === id ? ({ ...el, ...partial } as CanvasElement) : el
             )
+          }));
+        },
+
+        replaceElement: (id, replacement) => {
+          pushHistory(true);
+          set((state) => ({
+            elements: state.elements.map((el) =>
+              el.id === id ? replacement : el
+            ),
+            selectedId: replacement.id
           }));
         },
 
