@@ -33,6 +33,7 @@ export function EditorRoot() {
 
     setExporting(true);
     selectElement(null);
+    setZoom(1);
 
     await new Promise((r) => setTimeout(r, 120));
 
@@ -73,26 +74,30 @@ export function EditorRoot() {
             </select>
           </div>
 
-          <div className="min-w-[140px]">
-            <label className="panel-label">
-              Zoom ({Math.round(zoom * 100)}%)
-            </label>
-            <input
-              type="range"
-              min={20}
-              max={200}
-              value={zoom * 100}
-              onChange={(e) => setZoom(Number(e.target.value) / 100)}
-              className="w-full"
-            />
+          <div className="flex flex-col gap-1">
+            <span className="panel-label">
+              Zoom: {Math.round(zoom * 100)}%
+            </span>
+            <div className="flex gap-2 items-center">
+              <span className="text-[10px] font-black uppercase opacity-60">
+                Pinch / scroll to zoom
+              </span>
+              <button
+                type="button"
+                onClick={() => setZoom(1)}
+                className="brutal-border px-2 py-1 text-[10px] font-black uppercase bg-brand-sand dark:bg-[#262626]"
+              >
+                Reset
+              </button>
+            </div>
           </div>
         </div>
 
         <Toolbar onExport={handleExport} exporting={exporting} />
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-3">
-          <div className="brutal-card p-2 overflow-auto">
-            <div className="flex justify-center">
+          <div className="brutal-card p-2 overflow-auto max-h-[70vh]">
+            <div className="flex justify-center items-center min-h-[300px]">
               <Canvas stageRef={stageRef} />
             </div>
           </div>
