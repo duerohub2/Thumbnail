@@ -1,0 +1,132 @@
+'use client';
+
+import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import type { CanvasElement, CanvasBackground } from '@/types';
+import { STORAGE_KEY } from '@/lib/constants';
+
+interface EditorStore {
+  canvasWidth: number;
+  canvasHeight: number;
+  background: CanvasBackground;
+  elements: CanvasElement[];
+  selectedId: string | null;
+  zoom: number;
+
+  setCanvasSize: (w: number, h: number) => void;
+  setBackground: (partial: Partial<CanvasBackground>) => void;
+
+  addElement: (element: CanvasElement) => void;
+  updateElement: (id: string, partial: Partial<CanvasElement>) => void;
+  removeElement: (id: string) => void;
+  duplicateElement: (id: string) => void;
+
+  selectElement: (id: string | null) => void;
+  bringForward: (id: string) => void;
+  sendBackward: (id: string) => void;
+
+  setZoom: (zoom: number) => void;
+
+  resetAll: () => void;
+}
+
+const defaultBackground: CanvasBackground = {
+  imageSrc: null,
+  color: '#3a8fdc',
+  brightness: 0,
+  blur: 0
+};
+
+export const useEditorStore = create<EditorStore>()(
+  persist(
+    (set, get) => ({
+      canvasWidth: 1280,
+      canvasHeight: 720,
+      background: defaultBackground,
+      elements: [],
+      selectedId: null,
+      zoom: 1,
+
+      setCanvasSize: (w, h) => set({ canvasWidth: w, canvasHeight: h }),
+
+      setBackground: (partial) =>
+        set((state) => ({
+          background: { ...state.background, ...partial }
+        })),
+
+      addElement: (element) =>
+        set((state) => ({
+          elements: [...state.elements, element],
+          selectedId: element.id
+        })),
+
+      updateElement: (id, partial) =>
+        set((state) => ({
+          elements: state.elements.map((el) =>
+            el.id === id ? ({ ...el, ...partial } as CanvasElement) : el
+          )
+        })),
+
+      removeElement: (id) =>
+        set((state) => ({
+          elements: state.elements.filter((el) => el.id !== id),
+          selectedId: state.selectedId === id ? null : state.selectedId
+        })),
+
+      duplicateElement: (id) => {
+        const el = get().elements.find((e) => e.id === id);
+        if (!el) return;
+        const copy: CanvasElement = {
+          ...el,
+          id: el.id + '-copy-' + Math.random().toString(36).slice(2, 6),
+          x: el.x + 30,
+          y: el.y + 30
+        };
+        set((state) => ({
+          elements: [...state.elements, copy],
+          selectedId: copy.id
+        }));
+      },
+
+      selectElement: (id) => set({ selectedId: id }),
+
+      bringForward: (id) =>
+        set((state) => {
+          const idx = state.elements.findIndex((e) => e.id === id);
+          if (idx < 0 || idx === state.elements.length - 1) return state;
+          const arr = [...state.elements];
+          [arr[idx], arr[idx + 1]] = [arr[idx + 1], arr[idx]];
+          return { elements: arr };
+        }),
+
+      sendBackward: (id) =>
+        set((state) => {
+          const idx = state.elements.findIndex((e) => e.id === id);
+          if (idx <= 0) return state;
+          const arr = [...state.elements];
+          [arr[idx], arr[idx - 1]] = [arr[idx - 1], arr[idx]];
+          return { elements: arr };
+        }),
+
+      setZoom: (zoom) => set({ zoom }),
+
+      resetAll: () =>
+        set({
+          elements: [],
+          selectedId: null,
+          background: defaultBackground,
+          zoom: 1
+        })
+    }),
+    {
+      name: STORAGE_KEY,
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({
+        canvasWidth: state.canvasWidth,
+        canvasHeight: state.canvasHeight,
+        background: state.background,
+        elements: state.elements
+      })
+    }
+  )
+);
