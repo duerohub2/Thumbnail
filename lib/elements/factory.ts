@@ -2,6 +2,7 @@ import { generateId } from '@/lib/utils/id';
 import type {
   BadgeElementData,
   ImageElementData,
+  PlaceholderElementData,
   TextElementData
 } from '@/types';
 
@@ -85,6 +86,25 @@ export function createBadgeElement(
     paddingY: 12,
     cornerRadius: 12,
     rotationBias: -4,
+    ...overrides
+  };
+}
+
+export function createPlaceholderElement(
+  overrides: Partial<PlaceholderElementData> = {}
+): PlaceholderElementData {
+  return {
+    id: generateId(),
+    type: 'placeholder',
+    x: 100,
+    y: 100,
+    width: 300,
+    height: 300,
+    rotation: 0,
+    opacity: 1,
+    visible: true,
+    locked: false,
+    label: 'Add image',
     ...overrides
   };
 }
