@@ -7,6 +7,8 @@ import {
   createImageElement,
   createTextElement
 } from '@/lib/elements/factory';
+import { TemplateGallery } from '@/components/panels/TemplateGallery';
+import { PresetGallery } from '@/components/panels/PresetGallery';
 
 interface ToolbarProps {
   onExport: () => void;
@@ -65,6 +67,9 @@ export function Toolbar({ onExport, exporting }: ToolbarProps) {
   return (
     <div className="brutal-card p-3 flex flex-col gap-2">
       <div className="flex flex-wrap gap-2">
+        <TemplateGallery />
+        <PresetGallery />
+
         <button
           type="button"
           onClick={() => addElement(createTextElement())}
@@ -80,7 +85,9 @@ export function Toolbar({ onExport, exporting }: ToolbarProps) {
             input.type = 'file';
             input.accept = 'image/*';
             input.onchange = (ev) =>
-              handleAddImage(ev as unknown as React.ChangeEvent<HTMLInputElement>);
+              handleAddImage(
+                ev as unknown as React.ChangeEvent<HTMLInputElement>
+              );
             input.click();
           }}
           className="brutal-btn bg-brand-softblue text-brand-ink px-3 py-2 text-[10px]"
@@ -99,7 +106,7 @@ export function Toolbar({ onExport, exporting }: ToolbarProps) {
         <button
           type="button"
           onClick={() => bgFileRef.current?.click()}
-          className="brutal-btn bg-brand-lavender text-brand-ink px-3 py-2 text-[10px]"
+          className="brutal-btn bg-[var(--card-bg)] px-3 py-2 text-[10px]"
         >
           Background
         </button>
