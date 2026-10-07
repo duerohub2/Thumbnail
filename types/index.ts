@@ -1,4 +1,4 @@
-export type ElementType = 'text' | 'image' | 'badge';
+export type ElementType = 'text' | 'image' | 'badge' | 'placeholder';
 
 export interface BaseElement {
   id: string;
@@ -54,10 +54,16 @@ export interface BadgeElementData extends BaseElement {
   rotationBias: number;
 }
 
+export interface PlaceholderElementData extends BaseElement {
+  type: 'placeholder';
+  label: string;
+}
+
 export type CanvasElement =
   | TextElementData
   | ImageElementData
-  | BadgeElementData;
+  | BadgeElementData
+  | PlaceholderElementData;
 
 export interface CanvasBackground {
   imageSrc: string | null;
@@ -66,13 +72,7 @@ export interface CanvasBackground {
   blur: number;
 }
 
-export interface EditorState {
-  canvasWidth: number;
-  canvasHeight: number;
-  background: CanvasBackground;
+export interface HistorySnapshot {
   elements: CanvasElement[];
-  selectedId: string | null;
-  zoom: number;
-  panX: number;
-  panY: number;
+  background: CanvasBackground;
 }
